@@ -8,8 +8,8 @@ const camera = new THREE.PerspectiveCamera(
   100
 );
 
-camera.position.set(0, 2, 6);
-camera.lookAt(0, 0.5, 0);
+camera.position.set(0, 6, 6);
+camera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -41,8 +41,8 @@ wheel1.rotation.x = Math.PI / 2;
 wheel2.rotation.x = Math.PI / 2;
 
 // SEPARATE CLEARLY
-wheel1.position.set(0, 0.4, -1);
-wheel2.position.set(0, 0.4, 1);
+wheel1.position.set(-0.8, 0.4, 0);
+wheel2.position.set(0.8, 0.4, 0);
 
 scene.add(wheel1);
 scene.add(wheel2);
@@ -78,4 +78,4 @@ window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-});
+});renderer.setPixelRatio(window.devicePixelRatio);
