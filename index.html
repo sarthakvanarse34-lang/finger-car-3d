@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Finger Car 3D</title>
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
   <style>
     body {
       margin: 0;
       overflow: hidden;
-      background: black;
+      background: #000;
       touch-action: none;
-    }
-    canvas {
-      display: block;
     }
     h1 {
       position: absolute;
@@ -23,20 +18,18 @@
       left: 10px;
       color: white;
       z-index: 10;
-      font-size: 20px;
+      font-family: sans-serif;
+    }
+    canvas {
+      display: block;
     }
   </style>
 </head>
 
 <body>
-
   <h1>My Game</h1>
 
-  <!-- Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-
-  <!-- Game logic -->
   <script src="script.js"></script>
-
 </body>
 </html>
