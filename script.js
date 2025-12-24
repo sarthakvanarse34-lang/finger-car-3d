@@ -1,13 +1,15 @@
-// BASIC THREE SETUP
+// BASIC SETUP
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(
-  75,
+  60,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-camera.position.z = 5;
+camera.position.set(0, 5, 8);
+camera.lookAt(0, 0, 0);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -15,48 +17,61 @@ document.body.appendChild(renderer.domElement);
 
 // LIGHT
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 5, 5);
+light.position.set(5, 10, 5);
 scene.add(light);
 
+// GROUND (invisible reference)
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(50, 50),
+  new THREE.MeshStandardMaterial({ color: 0x111111 })
+);
+ground.rotation.x = -Math.PI / 2;
+scene.add(ground);
+
 // WHEEL GEOMETRY
-const wheelGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.2, 32);
+const wheelGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.4, 32);
 const wheelMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 
-// LEFT WHEEL
 const leftWheel = new THREE.Mesh(wheelGeo, wheelMat);
-leftWheel.rotation.z = Math.PI / 2;
-leftWheel.position.x = -0.6;
-
-// RIGHT WHEEL
 const rightWheel = new THREE.Mesh(wheelGeo, wheelMat);
-rightWheel.rotation.z = Math.PI / 2;
-rightWheel.position.x = 0.6;
 
-// GROUP (CAR)
-const car = new THREE.Group();
-car.add(leftWheel);
-car.add(rightWheel);
-scene.add(car);
+leftWheel.rotation.z = Math.PI / 2;
+rightWheel.rotation.z = Math.PI / 2;
+
+leftWheel.position.set(-0.7, 0.5, 0);
+rightWheel.position.set(0.7, 0.5, 0);
+
+scene.add(leftWheel, rightWheel);
+
+// TARGET POSITION
+let targetX = 0;
 
 // TOUCH CONTROL
 window.addEventListener("touchmove", (e) => {
   const touch = e.touches[0];
-  const x = (touch.clientX / window.innerWidth) * 2 - 1;
-  const y = -(touch.clientY / window.innerHeight) * 2 + 1;
-
-  car.position.x = x * 3;
-  car.position.y = y * 2;
+  targetX = (touch.clientX / window.innerWidth - 0.5) * 10;
 });
 
-// ANIMATION
+// ANIMATE
 function animate() {
   requestAnimationFrame(animate);
 
-  // wheels rotate = moving illusion
-  leftWheel.rotation.x += 0.1;
-  rightWheel.rotation.x += 0.1;
+  // MOVE
+  leftWheel.position.x += (targetX - leftWheel.position.x) * 0.1;
+  rightWheel.position.x += (targetX - rightWheel.position.x) * 0.1;
+
+  // ROTATE
+  leftWheel.rotation.x -= 0.2;
+  rightWheel.rotation.x -= 0.2;
 
   renderer.render(scene, camera);
 }
 
 animate();
+
+// RESIZE
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
